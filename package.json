@@ -1,0 +1,23 @@
+{
+  "name": "chronyx-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "axios": "^1.13.2",
+    "html5-qrcode": "^2.3.8",
+    "lucide-react": "^0.561.0",
+    "mysql2": "^3.16.0",
+    "next": "16.0.10",
+    "react": "19.2.1",
+    "react-dom": "19.2.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "tailwindcss": "^4"
+  }
+}
