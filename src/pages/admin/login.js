@@ -114,11 +114,13 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900 flex items-center justify-center p-4">
-      {/* Background Decorations */}
+    <div className="min-h-screen bg-[#FEFDFD] flex items-center justify-center p-4">
+      {/* Background Pattern */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div className="absolute top-0 left-0 w-full h-full opacity-[0.03]">
+          <div className="absolute top-20 left-20 w-72 h-72 bg-[#0A7EB1] rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-[#105891] rounded-full blur-3xl"></div>
+        </div>
       </div>
 
       {/* Login Card */}
@@ -126,45 +128,47 @@ export default function AdminLogin() {
         {/* Back Button */}
         <button
           onClick={handleBack}
-          className="mb-6 flex items-center space-x-2 text-white/80 hover:text-white transition"
+          className="mb-6 flex items-center space-x-2 text-gray-600 hover:text-[#0A7EB1] transition-colors duration-200 group"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
-          <span>Back to Home</span>
+          <span className="font-medium">Back to Home</span>
         </button>
 
-        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-8 text-center">
-            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
+          <div className="bg-gradient-to-r from-[#0A7EB1] to-[#0A6BA3] px-8 py-10 text-center">
+            <div className="flex justify-center mb-4">
+              <img 
+                src="/images/chronyxcircle.png" 
+                alt="Chronyx Logo" 
+                className="h-16 w-auto"
+              />
             </div>
-            <h2 className="text-3xl font-bold text-white mb-1">Admin Portal</h2>
-            <p className="text-indigo-100">Sign in to manage the system</p>
+            <h2 className="text-3xl font-bold text-white mb-2">Admin Portal</h2>
+            <p className="text-white/90">Sign in to manage the system</p>
           </div>
 
           {/* Form */}
           <div className="p-8">
             {error && (
-              <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center">
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3.5 rounded-xl flex items-start">
+                <svg className="w-5 h-5 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                {error}
+                <span className="text-sm">{error}</span>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
               {/* Username Field */}
               <div>
                 <label htmlFor="username" className="block text-sm font-semibold text-gray-700 mb-2">
                   Username
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                     <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
@@ -175,7 +179,7 @@ export default function AdminLogin() {
                     name="username"
                     value={formData.username}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 text-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                    className="w-full pl-11 pr-4 py-3 border border-gray-300 text-gray-700 rounded-xl focus:ring-2 focus:ring-[#0A7EB1] focus:border-transparent outline-none transition"
                     placeholder="Enter your username"
                     disabled={loading}
                   />
@@ -188,7 +192,7 @@ export default function AdminLogin() {
                   Password
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                     <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
@@ -199,7 +203,7 @@ export default function AdminLogin() {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 text-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                    className="w-full pl-11 pr-4 py-3 border border-gray-300 text-gray-700 rounded-xl focus:ring-2 focus:ring-[#0A7EB1] focus:border-transparent outline-none transition"
                     placeholder="Enter your password"
                     disabled={loading}
                   />
@@ -210,7 +214,7 @@ export default function AdminLogin() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-[#0A7EB1] to-[#0A6BA3] hover:from-[#105891] hover:to-[#0A7EB1] text-white font-semibold py-3.5 px-6 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed mt-2"
               >
                 {loading ? (
                   <div className="flex items-center justify-center">
@@ -227,28 +231,35 @@ export default function AdminLogin() {
             </form>
           </div>
         </div>
+
+        {/* Footer Note */}
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-500">
+            Secure access for authorized administrators only
+          </p>
+        </div>
       </div>
 
       {/* PIN Modal */}
       {showPinModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-slideUp">
             {/* Modal Header */}
-            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-6 text-center">
-              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-3">
-                <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="bg-gradient-to-r from-[#0A7EB1] to-[#0A6BA3] px-6 py-8 text-center">
+              <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/30">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                 </svg>
               </div>
               <h3 className="text-2xl font-bold text-white mb-1">Enter PIN</h3>
-              <p className="text-indigo-100 text-sm">Hello, {adminData?.name}</p>
+              <p className="text-white/90">Hello, <strong>{adminData?.name}</strong></p>
             </div>
 
             {/* Modal Body */}
             <div className="p-6">
               {pinError && (
-                <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center text-sm">
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="mb-5 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-start text-sm">
+                  <svg className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   {pinError}
@@ -257,8 +268,8 @@ export default function AdminLogin() {
 
               <form onSubmit={handlePinSubmit} className="space-y-6">
                 <div>
-                  <label htmlFor="pin" className="block text-sm font-semibold text-gray-700 mb-2">
-                    4-Digit PIN
+                  <label htmlFor="pin" className="block text-sm font-semibold text-gray-700 mb-2 text-center">
+                    4-Digit PIN Code
                   </label>
                   <input
                     type="password"
@@ -269,12 +280,15 @@ export default function AdminLogin() {
                       setPin(value);
                       setPinError('');
                     }}
-                    className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition text-center text-2xl tracking-widest"
+                    className="w-full px-4 py-4 border-2 border-gray-300 text-gray-700 rounded-xl focus:ring-2 focus:ring-[#0A7EB1] focus:border-[#0A7EB1] outline-none transition text-center text-3xl tracking-[0.5em] font-semibold"
                     placeholder="••••"
                     maxLength={4}
                     disabled={pinLoading}
                     autoFocus
                   />
+                  <p className="mt-2 text-xs text-gray-500 text-center">
+                    Enter your 4-digit security PIN
+                  </p>
                 </div>
 
                 <div className="flex space-x-3">
@@ -282,14 +296,14 @@ export default function AdminLogin() {
                     type="button"
                     onClick={handleClosePinModal}
                     disabled={pinLoading}
-                    className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-lg transition duration-200"
+                    className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-xl transition-all duration-200"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={pinLoading || pin.length !== 4}
-                    className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 bg-gradient-to-r from-[#0A7EB1] to-[#0A6BA3] hover:from-[#105891] hover:to-[#0A7EB1] text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {pinLoading ? (
                       <div className="flex items-center justify-center">
@@ -308,6 +322,33 @@ export default function AdminLogin() {
           </div>
         </div>
       )}
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+        @keyframes slideUp {
+          from {
+            transform: translateY(20px);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.2s ease-out;
+        }
+        .animate-slideUp {
+          animation: slideUp 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 }

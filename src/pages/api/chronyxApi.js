@@ -1,3 +1,4 @@
+//src/pages/api/chronyxApi.js
 import { query } from '../../utils/db';
 
 const handler = async (req, res) => {
@@ -215,10 +216,29 @@ async function handleGetRecentAttendance(req, res) {
     console.log('=== GET RECENT ATTENDANCE REQUEST ===');
 
     const attendance = await query(
-      'SELECT * FROM attendance ORDER BY date DESC, time DESC LIMIT 50'
+      `SELECT 
+        a.*,
+        e.first_name,
+        e.last_name,
+        e.email,
+        e.avatar_url
+      FROM attendance a
+      LEFT JOIN employee e ON a.employee_id = e.employee_id
+      ORDER BY a.date DESC, a.time DESC 
+      LIMIT 50`
     );
 
     console.log('Attendance records found:', attendance.length);
+    if (attendance.length > 0) {
+      console.log('Sample record:', {
+        id: attendance[0].attendance_id,
+        employee: `${attendance[0].first_name} ${attendance[0].last_name}`,
+        date: attendance[0].date,
+        time: attendance[0].time,
+        action: attendance[0].action_type,
+        avatar: attendance[0].avatar_url || 'No avatar'
+      });
+    }
 
     return res.status(200).json({
       success: true,
@@ -265,12 +285,11 @@ async function handleGetPayrollRecords(req, res) {
     console.log('=== GET PAYROLL RECORDS REQUEST ===');
 
     const payrollRecords = await query(
-      `SELECT p.*, e.first_name, e.last_name, e.email 
-       FROM payroll p 
-       JOIN employee e ON p.employee_id = e.employee_id 
-       ORDER BY p.created_at DESC, p.period_start DESC`
-    );
-
+  `SELECT p.*, e.first_name, e.last_name, e.email, e.avatar_url 
+   FROM payroll p 
+   JOIN employee e ON p.employee_id = e.employee_id 
+   ORDER BY p.created_at DESC, p.period_start DESC`
+);
     console.log('Payroll records found:', payrollRecords.length);
 
     return res.status(200).json({
@@ -305,7 +324,7 @@ async function handleCalculatePayroll(req, res) {
     }
 
     // Get all employees with their hourly rates
-    const employees = await query('SELECT employee_id, first_name, last_name, email, hourly_rate FROM employee');
+    const employees = await query('SELECT employee_id, first_name, last_name, email, avatar_url, hourly_rate FROM employee');
 
     const payrollData = [];
     let totalHours = 0;
@@ -371,15 +390,16 @@ async function handleCalculatePayroll(req, res) {
         const grossSalary = employeeTotalHours * employee.hourly_rate;
         
         payrollData.push({
-          employee_id: employee.employee_id,
-          first_name: employee.first_name,
-          last_name: employee.last_name,
-          email: employee.email,
-          days_worked: workDates.size,
-          total_hours: employeeTotalHours,
-          hourly_rate: employee.hourly_rate,
-          gross_salary: grossSalary
-        });
+  employee_id: employee.employee_id,
+  first_name: employee.first_name,
+  last_name: employee.last_name,
+  email: employee.email,
+  avatar_url: employee.avatar_url,
+  days_worked: workDates.size,
+  total_hours: employeeTotalHours,
+  hourly_rate: employee.hourly_rate,
+  gross_salary: grossSalary
+});
 
         totalHours += employeeTotalHours;
         totalSalary += grossSalary;

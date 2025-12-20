@@ -17,7 +17,6 @@ export default function QRScannerModal({ isOpen, onClose, onScanSuccess }) {
           console.log('📷 Available cameras:', devices);
           if (devices && devices.length) {
             setCameras(devices);
-            // Select the first camera (usually back camera on mobile, any camera on laptop)
             setSelectedCamera(devices[0].id);
           } else {
             setError('No cameras found on this device');
@@ -63,10 +62,8 @@ export default function QRScannerModal({ isOpen, onClose, onScanSuccess }) {
           setProcessing(true);
           console.log(`✅ QR Code detected: ${decodedText}`);
 
-          // Stop scanning
           await stopScanning();
 
-          // Call success handler
           if (onScanSuccess) {
             await onScanSuccess(decodedText);
           }
@@ -74,7 +71,6 @@ export default function QRScannerModal({ isOpen, onClose, onScanSuccess }) {
           setProcessing(false);
         },
         (errorMessage) => {
-          // Ignore common scan errors (these fire constantly when no QR is detected)
           if (!errorMessage.includes('NotFoundException')) {
             console.warn('Scan frame error:', errorMessage);
           }
@@ -126,68 +122,100 @@ export default function QRScannerModal({ isOpen, onClose, onScanSuccess }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fadeIn">
+      {/* Backdrop with blur - similar to PayrollModal */}
+      <div 
+        className="absolute inset-0 bg-black/20 backdrop-blur-sm transition-all duration-300"
+        onClick={handleClose}
+      ></div>
+
+      {/* Modal */}
+      <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col transform transition-all duration-300 scale-100">
         {/* Header */}
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4 rounded-t-2xl flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-              <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="bg-gradient-to-r from-[#0A7EB1] via-[#105891] to-[#0A6BA3] px-8 py-6 flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center shadow-lg">
+              <svg className="w-7 h-7 text-[#0A7EB1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-white">Scan QR Code</h2>
+            <div>
+              <h2 className="text-2xl font-bold text-white">Scan QR Code</h2>
+              <p className="text-white/80 text-sm">Position QR code in the camera frame</p>
+            </div>
           </div>
           <button
             onClick={handleClose}
-            className="text-white hover:bg-white/20 rounded-full p-2 transition"
+            className="p-2 hover:bg-white/20 rounded-xl transition-colors"
             disabled={processing}
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
         {/* Scanner Body */}
-        <div className="p-6">
+        <div className="flex-1 overflow-y-auto p-8">
           {/* Instructions */}
-          <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-6">
-            <h3 className="font-semibold text-blue-900 mb-2 flex items-center">
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-2xl p-5 mb-6">
+            <h3 className="font-bold text-blue-900 mb-3 flex items-center text-lg">
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               Instructions
             </h3>
-            <ul className="text-sm text-blue-800 space-y-1">
-              <li>• Ask the employee to open their QR code on their phone</li>
-              <li>• Position the QR code within the scanning frame</li>
-              <li>• The system will automatically detect and process the QR code</li>
-              <li>• Wait for the confirmation message</li>
+            <ul className="text-sm text-blue-800 space-y-2">
+              <li className="flex items-start">
+                <span className="mr-2">•</span>
+                <span>Ask the employee to open their QR code on their phone</span>
+              </li>
+              <li className="flex items-start">
+                <span className="mr-2">•</span>
+                <span>Position the QR code within the scanning frame below</span>
+              </li>
+              <li className="flex items-start">
+                <span className="mr-2">•</span>
+                <span>The system will automatically detect and process the QR code</span>
+              </li>
+              <li className="flex items-start">
+                <span className="mr-2">•</span>
+                <span>Wait for the confirmation message</span>
+              </li>
             </ul>
           </div>
 
           {/* Camera Selector */}
           {cameras.length > 1 && !processing && (
-            <div className="mb-4 flex items-center justify-between bg-indigo-50 p-3 rounded-lg">
-              <span className="text-sm font-medium text-indigo-900">
-                Using: {cameras.find(c => c.id === selectedCamera)?.label || 'Camera'}
-              </span>
+            <div className="mb-6 flex items-center justify-between bg-gradient-to-r from-[#0A7EB1]/10 to-[#105891]/10 p-4 rounded-xl border border-[#0A7EB1]/20">
+              <div className="flex items-center space-x-3">
+                <svg className="w-5 h-5 text-[#0A7EB1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span className="text-sm font-semibold text-gray-700">
+                  {cameras.find(c => c.id === selectedCamera)?.label || 'Camera'}
+                </span>
+              </div>
               <button
                 onClick={handleCameraSwitch}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+                className="bg-gradient-to-r from-[#0A7EB1] to-[#105891] hover:from-[#105891] hover:to-[#0A6BA3] text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-lg hover:shadow-xl flex items-center space-x-2"
               >
-                Switch Camera
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span>Switch Camera</span>
               </button>
             </div>
           )}
 
           {/* Scanner Container */}
-          <div className="bg-gray-900 rounded-lg overflow-hidden relative">
+          <div className="bg-gray-900 rounded-2xl overflow-hidden relative shadow-2xl">
             {processing ? (
-              <div className="flex flex-col items-center justify-center py-24">
-                <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-indigo-600 mb-4"></div>
-                <p className="text-white font-medium">Processing QR Code...</p>
+              <div className="flex flex-col items-center justify-center py-32">
+                <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-[#0A7EB1] mb-4"></div>
+                <p className="text-white font-semibold text-lg">Processing QR Code...</p>
+                <p className="text-white/60 text-sm mt-2">Please wait...</p>
               </div>
             ) : (
               <>
@@ -196,7 +224,14 @@ export default function QRScannerModal({ isOpen, onClose, onScanSuccess }) {
                 {/* Overlay scanning frame */}
                 {scanning && (
                   <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                    <div className="w-64 h-64 border-4 border-green-500 rounded-lg animate-pulse"></div>
+                    <div className="relative">
+                      <div className="w-64 h-64 border-4 border-[#0A7EB1] rounded-2xl animate-pulse shadow-lg"></div>
+                      {/* Corner decorations */}
+                      <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-white rounded-tl-2xl"></div>
+                      <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-white rounded-tr-2xl"></div>
+                      <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-white rounded-bl-2xl"></div>
+                      <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-white rounded-br-2xl"></div>
+                    </div>
                   </div>
                 )}
               </>
@@ -205,14 +240,14 @@ export default function QRScannerModal({ isOpen, onClose, onScanSuccess }) {
 
           {/* Error Message */}
           {error && (
-            <div className="mt-4 bg-red-50 border-2 border-red-200 rounded-lg p-4">
+            <div className="mt-6 bg-red-50 border-2 border-red-200 rounded-2xl p-5">
               <div className="flex items-start">
-                <svg className="w-5 h-5 text-red-600 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-red-600 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <div>
-                  <p className="text-red-800 font-medium">{error}</p>
-                  <p className="text-red-600 text-sm mt-1">
+                  <p className="text-red-800 font-semibold text-lg">{error}</p>
+                  <p className="text-red-600 text-sm mt-2">
                     Please make sure you've granted camera permissions to this website.
                   </p>
                 </div>
@@ -222,39 +257,52 @@ export default function QRScannerModal({ isOpen, onClose, onScanSuccess }) {
 
           {/* Status */}
           {scanning && !processing && !error && (
-            <div className="mt-4 bg-green-50 border-2 border-green-200 rounded-lg p-4">
-              <p className="text-green-800 font-medium text-center flex items-center justify-center">
-                <svg className="w-5 h-5 mr-2 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="mt-6 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-2xl p-5">
+              <p className="text-green-800 font-semibold text-center flex items-center justify-center text-lg">
+                <svg className="w-6 h-6 mr-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
-                📷 Camera active. Point at QR code to scan...
+                Camera is active. Position QR code to scan...
               </p>
             </div>
           )}
         </div>
 
         {/* Footer */}
-        <div className="bg-gray-50 px-6 py-4 rounded-b-2xl flex justify-end space-x-3">
+        <div className="border-t-2 border-gray-200 px-8 py-5 bg-gray-50 flex justify-end">
           <button
             onClick={handleClose}
-            className="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition"
+            className="px-8 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl font-semibold transition-colors"
             disabled={processing}
           >
-            Close
+            Close Scanner
           </button>
         </div>
       </div>
 
       {/* Global styles for html5-qrcode */}
       <style jsx global>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+        
+        .animate-fadeIn {
+          animation: fadeIn 0.2s ease-out;
+        }
+
         #qr-reader {
           width: 100% !important;
         }
         #qr-reader video {
-          width: 100% !important;
+          width: 200% !important;
           max-width: 100% !important;
-          border-radius: 8px;
+          border-radius: 16px;
           display: block !important;
           object-fit: cover !important;
         }
