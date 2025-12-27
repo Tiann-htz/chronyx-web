@@ -1,0 +1,133 @@
+import { CheckCircle, XCircle, AlertTriangle, X, HelpCircle } from 'lucide-react';
+
+export default function QRAlert({ isOpen, onClose, onConfirm, type, title, message, showConfirm = false }) {
+  if (!isOpen) return null;
+
+  const styles = {
+    success: {
+      bg: 'from-green-50 to-emerald-50',
+      border: 'border-green-300',
+      icon: 'text-green-600',
+      title: 'text-green-900',
+      buttonBg: 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700',
+      IconComponent: CheckCircle
+    },
+    error: {
+      bg: 'from-red-50 to-rose-50',
+      border: 'border-red-300',
+      icon: 'text-red-600',
+      title: 'text-red-900',
+      buttonBg: 'bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700',
+      IconComponent: XCircle
+    },
+    confirm: {
+      bg: 'from-orange-50 to-yellow-50',
+      border: 'border-orange-300',
+      icon: 'text-orange-600',
+      title: 'text-orange-900',
+      buttonBg: 'bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700',
+      IconComponent: AlertTriangle
+    },
+    info: {
+      bg: 'from-blue-50 to-indigo-50',
+      border: 'border-blue-300',
+      icon: 'text-blue-600',
+      title: 'text-blue-900',
+      buttonBg: 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700',
+      IconComponent: HelpCircle
+    }
+  };
+
+  const style = styles[type] || styles.info;
+  const Icon = style.IconComponent;
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/30 backdrop-blur-sm transition-all duration-300"
+        onClick={showConfirm ? null : onClose}
+      ></div>
+
+      {/* Alert Card */}
+      <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden transform transition-all duration-300 animate-slideIn">
+        {/* Header with gradient */}
+        <div className={`bg-gradient-to-r ${style.bg} border-b-2 ${style.border} px-6 py-5`}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className={`w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-lg ${style.icon}`}>
+                <Icon className="w-7 h-7" />
+              </div>
+              <h3 className={`text-xl font-bold ${style.title}`}>
+                {title}
+              </h3>
+            </div>
+            {!showConfirm && (
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-white/50 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-600" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Body */}
+        <div className="p-6">
+          <p className="text-gray-700 text-base leading-relaxed whitespace-pre-line">
+            {message}
+          </p>
+        </div>
+
+        {/* Footer */}
+        <div className="border-t-2 border-gray-100 px-6 py-4 bg-gray-50 flex justify-end space-x-3">
+          {showConfirm ? (
+            <>
+              <button
+                onClick={onClose}
+                className="px-6 py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl font-semibold transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  onConfirm();
+                  onClose();
+                }}
+                className={`px-6 py-2.5 rounded-xl font-semibold text-white transition-all shadow-md hover:shadow-lg ${style.buttonBg}`}
+              >
+                Confirm
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={onClose}
+              className={`px-6 py-2.5 rounded-xl font-semibold text-white transition-all shadow-md hover:shadow-lg ${style.buttonBg}`}
+            >
+              OK
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Animation Styles */}
+      <style jsx>{`
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: scale(0.9) translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+
+        .animate-slideIn {
+          animation: slideIn 0.3s ease-out forwards;
+        }
+      `}</style>
+    </div>
+  );
+}

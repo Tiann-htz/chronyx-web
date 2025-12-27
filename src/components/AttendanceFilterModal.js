@@ -1,53 +1,75 @@
 import { useState, useEffect } from 'react';
-import { X, Calendar, Clock, Save, Info } from 'lucide-react';
+import { X, Calendar, Clock, Filter, Info } from 'lucide-react';
 
-export default function ScheduleModal({ isOpen, onClose, onSave }) {
-  const [scheduleDate, setScheduleDate] = useState('');
+export default function AttendanceFilterModal({ isOpen, onClose, onApplyFilter }) {
+  const [filterDate, setFilterDate] = useState('');
   const [filterType, setFilterType] = useState('all'); // 'all', 'time-in', 'time-out'
 
   useEffect(() => {
-    if (isOpen) {
-      // Set default to today
-      const today = new Date().toISOString().split('T')[0];
-      setScheduleDate(today);
-      setFilterType('all');
-    }
-  }, [isOpen]);
+  if (isOpen) {
+    // Set default to today (Philippine time)
+    const phNow = new Date().toLocaleString('en-US', { timeZone: 'Asia/Manila' });
+    const phToday = new Date(phNow).toISOString().split('T')[0];
+    setFilterDate(phToday);
+    setFilterType('all');
+  }
+}, [isOpen]);
 
-  const handleSave = () => {
-    if (!scheduleDate) {
+  const handleApply = () => {
+    if (!filterDate) {
       alert('Please select a date');
       return;
     }
 
-    const schedule = {
-      date: scheduleDate,
+    const filter = {
+      date: filterDate,
       filterType: filterType
     };
 
-    console.log('=== SCHEDULE MODAL - SAVING ===');
-    console.log('Schedule data:', schedule);
+    console.log('=== ATTENDANCE FILTER APPLIED ===');
+    console.log('Filter data:', filter);
 
     // Call parent callback
-    if (onSave) {
-      onSave(schedule);
+    if (onApplyFilter) {
+      onApplyFilter(filter);
     }
 
     onClose();
   };
 
-  const handleClearSchedule = () => {
-    if (confirm('Are you sure you want to clear the schedule? This will show all attendance records.')) {
-      setScheduleDate('');
+  const handleClearFilter = () => {
+    if (confirm('Are you sure you want to clear the filter? This will show recent attendance records.')) {
+      setFilterDate('');
       setFilterType('all');
       
-      if (onSave) {
-        onSave(null);
+      if (onApplyFilter) {
+        onApplyFilter(null);
       }
       
       onClose();
     }
   };
+
+  const handleQuickDate = (type) => {
+  // Get current date in Philippine timezone
+  const phNow = new Date().toLocaleString('en-US', { timeZone: 'Asia/Manila' });
+  const today = new Date(phNow);
+  
+  if (type === 'today') {
+    setFilterDate(today.toISOString().split('T')[0]);
+  } else if (type === 'yesterday') {
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    setFilterDate(yesterday.toISOString().split('T')[0]);
+  } else if (type === 'week-start') {
+    // Get Monday of current week
+    const monday = new Date(today);
+    const day = monday.getDay();
+    const diff = monday.getDate() - day + (day === 0 ? -6 : 1);
+    monday.setDate(diff);
+    setFilterDate(monday.toISOString().split('T')[0]);
+  }
+};
 
   if (!isOpen) return null;
 
@@ -65,11 +87,11 @@ export default function ScheduleModal({ isOpen, onClose, onSave }) {
         <div className="bg-gradient-to-r from-[#0A7EB1] via-[#105891] to-[#0A6BA3] px-8 py-6 flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center shadow-lg">
-              <Calendar className="w-7 h-7 text-[#0A7EB1]" />
+              <Filter className="w-7 h-7 text-[#0A7EB1]" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-white">Schedule Attendance</h2>
-              <p className="text-white/80 text-sm">Filter attendance by date and type</p>
+              <h2 className="text-2xl font-bold text-white">Filter Attendance Records</h2>
+              <p className="text-white/80 text-sm">View attendance by date and action type</p>
             </div>
           </div>
           <button
@@ -87,26 +109,54 @@ export default function ScheduleModal({ isOpen, onClose, onSave }) {
             <div className="flex items-start space-x-3">
               <Info className="w-5 h-5 text-[#0A7EB1] flex-shrink-0 mt-0.5" />
               <div>
-                <p className="font-semibold text-gray-900 text-sm mb-2">How it works:</p>
+                <p className="font-semibold text-gray-900 text-sm mb-2">About Filtering:</p>
                 <ul className="text-xs text-gray-700 space-y-1">
-                  <li>• Select a date to filter attendance records</li>
-                  <li>• Choose to show All, Time In Only, or Time Out Only</li>
+                  <li>• This filters existing attendance records only</li>
+                  <li>• Select a date to view that day's attendance</li>
+                  <li>• Choose to show All records, Time In only, or Time Out only</li>
                   <li>• Stats and table will update based on your filter</li>
-                  <li>• Clear schedule to show all records</li>
+                  <li>• Clear filter to return to recent records view</li>
                 </ul>
               </div>
+            </div>
+          </div>
+
+          {/* Quick Date Selection */}
+          <div>
+            <label className="block text-sm font-bold text-gray-700 mb-3">
+              Quick Date Select
+            </label>
+            <div className="grid grid-cols-3 gap-3">
+              <button
+                onClick={() => handleQuickDate('today')}
+                className="p-3 border-2 border-gray-200 rounded-xl hover:border-[#0A7EB1] hover:bg-blue-50 transition-all text-sm font-semibold text-gray-700"
+              >
+                📅 Today
+              </button>
+              <button
+                onClick={() => handleQuickDate('yesterday')}
+                className="p-3 border-2 border-gray-200 rounded-xl hover:border-[#0A7EB1] hover:bg-blue-50 transition-all text-sm font-semibold text-gray-700"
+              >
+                ⏮️ Yesterday
+              </button>
+              <button
+                onClick={() => handleQuickDate('week-start')}
+                className="p-3 border-2 border-gray-200 rounded-xl hover:border-[#0A7EB1] hover:bg-blue-50 transition-all text-sm font-semibold text-gray-700"
+              >
+                📆 This Week
+              </button>
             </div>
           </div>
 
           {/* Date Selection */}
           <div>
             <label className="block text-sm font-bold text-gray-700 mb-2">
-              Schedule Date
+              Or Select Specific Date
             </label>
             <input
               type="date"
-              value={scheduleDate}
-              onChange={(e) => setScheduleDate(e.target.value)}
+              value={filterDate}
+              onChange={(e) => setFilterDate(e.target.value)}
               className="w-full px-4 py-3 border-2 border-gray-300 text-gray-700 rounded-xl focus:ring-2 focus:ring-[#0A7EB1] focus:border-[#0A7EB1] outline-none transition-all"
             />
           </div>
@@ -114,7 +164,7 @@ export default function ScheduleModal({ isOpen, onClose, onSave }) {
           {/* Filter Type Selection */}
           <div>
             <label className="block text-sm font-bold text-gray-700 mb-3">
-              Filter Type
+              Action Type Filter
             </label>
             <div className="grid grid-cols-3 gap-4">
               {/* All Records */}
@@ -187,15 +237,39 @@ export default function ScheduleModal({ isOpen, onClose, onSave }) {
               </button>
             </div>
           </div>
+
+          {/* Selected Filter Preview */}
+          {filterDate && (
+            <div className="bg-gradient-to-r from-gray-50 to-gray-100 border-2 border-gray-200 rounded-2xl p-5">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm">
+                  <Filter className="w-6 h-6 text-[#0A7EB1]" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-600">Filter Preview</p>
+                  <p className="text-lg font-bold text-[#0A7EB1]">
+                    {new Date(filterDate + 'T00:00:00').toLocaleDateString('en-US', { 
+                      month: 'long', 
+                      day: 'numeric', 
+                      year: 'numeric' 
+                    })}
+                    {filterType === 'time-in' && ' - Time In Only'}
+                    {filterType === 'time-out' && ' - Time Out Only'}
+                    {filterType === 'all' && ' - All Records'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Footer */}
         <div className="border-t-2 border-gray-200 px-8 py-5 bg-gray-50 flex justify-between">
           <button
-            onClick={handleClearSchedule}
+            onClick={handleClearFilter}
             className="px-6 py-3 bg-red-100 hover:bg-red-200 text-red-700 rounded-xl font-semibold transition-colors"
           >
-            Clear Schedule
+            Clear Filter
           </button>
           <div className="flex items-center space-x-3">
             <button
@@ -205,10 +279,11 @@ export default function ScheduleModal({ isOpen, onClose, onSave }) {
               Cancel
             </button>
             <button
-              onClick={handleSave}
-              className="px-8 py-3 bg-gradient-to-r from-[#0A7EB1] to-[#105891] hover:from-[#105891] hover:to-[#0A6BA3] text-white rounded-xl font-bold transition-all shadow-lg hover:shadow-xl flex items-center space-x-2"
+              onClick={handleApply}
+              disabled={!filterDate}
+              className="px-8 py-3 bg-gradient-to-r from-[#0A7EB1] to-[#105891] hover:from-[#105891] hover:to-[#0A6BA3] text-white rounded-xl font-bold transition-all shadow-lg hover:shadow-xl flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Save className="w-5 h-5" />
+              <Filter className="w-5 h-5" />
               <span>Apply Filter</span>
             </button>
           </div>

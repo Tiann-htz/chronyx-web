@@ -101,10 +101,7 @@ export default function Payroll() {
                 <Banknote className="w-5 h-5" />
                 <span>Generate Payroll</span>
               </button>
-              <button className="relative p-2.5 hover:bg-gray-100 rounded-lg transition-colors">
-                <Bell className="w-6 h-6 text-gray-600" />
-                <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
-              </button>
+            
             </div>
           </div>
         </header>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X, Calendar, Banknote, Clock, Users, DollarSign } from 'lucide-react';
 import axios from 'axios';
+import PayrollAlert from './alerts/PayrollAlert';
 
 export default function PayrollModal({ isOpen, onClose }) {
   const [step, setStep] = useState(1);
@@ -13,6 +14,11 @@ export default function PayrollModal({ isOpen, onClose }) {
     totalHours: 0,
     totalSalary: 0
   });
+
+  // Alert states
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertType, setAlertType] = useState('success');
+  const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
     if (!isOpen) {
@@ -44,7 +50,9 @@ export default function PayrollModal({ isOpen, onClose }) {
 
   const calculatePayroll = async () => {
     if (!periodStart || !periodEnd) {
-      alert('Please select both start and end dates');
+      setAlertType('error');
+      setAlertMessage('Please select both start and end dates');
+      setAlertOpen(true);
       return;
     }
 
@@ -64,7 +72,9 @@ export default function PayrollModal({ isOpen, onClose }) {
       }
     } catch (error) {
       console.error('Calculate payroll error:', error);
-      alert(error.response?.data?.message || 'Failed to calculate payroll');
+      setAlertType('error');
+      setAlertMessage(error.response?.data?.message || 'Failed to calculate payroll');
+      setAlertOpen(true);
     } finally {
       setLoading(false);
     }
@@ -82,12 +92,20 @@ export default function PayrollModal({ isOpen, onClose }) {
       });
 
       if (response.data.success) {
-        alert('Payroll generated successfully!');
-        onClose();
+        setAlertType('success');
+        setAlertMessage('Payroll generated successfully!');
+        setAlertOpen(true);
+        
+        // Wait for alert to show, then close modal
+        setTimeout(() => {
+          onClose();
+        }, 1500);
       }
     } catch (error) {
       console.error('Generate payroll error:', error);
-      alert(error.response?.data?.message || 'Failed to generate payroll');
+      setAlertType('error');
+      setAlertMessage(error.response?.data?.message || 'Failed to generate payroll');
+      setAlertOpen(true);
     } finally {
       setLoading(false);
     }
@@ -238,7 +256,7 @@ export default function PayrollModal({ isOpen, onClose }) {
                     type="date"
                     value={periodStart}
                     onChange={(e) => setPeriodStart(e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0A7EB1] focus:border-[#0A7EB1] outline-none transition-all"
+                    className="w-full px-4 py-3 border-2 border-gray-300 text-gray-500 rounded-xl focus:ring-2 focus:ring-[#0A7EB1] focus:border-[#0A7EB1] outline-none transition-all"
                   />
                 </div>
 
@@ -251,7 +269,7 @@ export default function PayrollModal({ isOpen, onClose }) {
                     value={periodEnd}
                     onChange={(e) => setPeriodEnd(e.target.value)}
                     min={periodStart}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0A7EB1] focus:border-[#0A7EB1] outline-none transition-all"
+                    className="w-full px-4 py-3 border-2 border-gray-300 text-gray-500 rounded-xl focus:ring-2 focus:ring-[#0A7EB1] focus:border-[#0A7EB1] outline-none transition-all"
                   />
                 </div>
               </div>
@@ -420,6 +438,13 @@ export default function PayrollModal({ isOpen, onClose }) {
           </div>
         </div>
       </div>
+      {/* Payroll Alert */}
+      <PayrollAlert
+        isOpen={alertOpen}
+        onClose={() => setAlertOpen(false)}
+        type={alertType}
+        message={alertMessage}
+      />
     </div>
   );
 }

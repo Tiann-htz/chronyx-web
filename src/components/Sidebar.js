@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { LayoutDashboard, Users, Calendar, Banknote, QrCode, LogOut, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Users, Calendar, Banknote, QrCode, FileText, LogOut, Menu, X } from 'lucide-react';
 import Image from 'next/image';
 
 export default function Sidebar({ activeTab, setActiveTab, adminName }) {
@@ -8,16 +8,16 @@ export default function Sidebar({ activeTab, setActiveTab, adminName }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const sidebarItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/admin/dashboard' },
-    { id: 'employees', label: 'Employees', icon: Users, href: '/admin/employees' },
-    { id: 'attendance', label: 'Attendance', icon: Calendar, href: '/admin/attendance' },
-    { id: 'payroll', label: 'Payroll', icon: Banknote, href: '/admin/payroll' },
-    { id: 'qr-codes', label: 'QR Codes', icon: QrCode, href: '/admin/qrcodes' }
-  ];
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/admin/dashboard' },
+  { id: 'employees', label: 'Employees', icon: Users, href: '/admin/employees' },
+  { id: 'attendance', label: 'Attendance', icon: Calendar, href: '/admin/attendance' },
+  { id: 'payroll', label: 'Payroll', icon: Banknote, href: '/admin/payroll' },
+  { id: 'reports', label: 'Reports', icon: FileText, href: '/admin/reports' }
+];
 
   const handleLogout = () => {
     localStorage.removeItem('adminData');
-    router.push('/admin/login');
+    router.push('/');
   };
 
   const handleNavigation = (item) => {
@@ -42,64 +42,37 @@ export default function Sidebar({ activeTab, setActiveTab, adminName }) {
           sidebarOpen ? 'w-72' : 'lg:w-20'
         } h-screen bg-gradient-to-b from-[#0A7EB1] via-[#105891] to-[#0A6BA3] text-white transition-all duration-300 flex flex-col shadow-2xl`}
       >
-        {/* Logo Section */}
+      {/* Admin Info */}
         <div className="p-6 border-b border-white/10">
           <div className="flex items-center justify-between">
             {sidebarOpen ? (
-              <div className="flex items-center space-x-3">
-                <div className="relative w-12 h-12">
-                  <Image
-                    src="/images/chronyxcircle.png"
-                    alt="Chronyx Logo"
-                    width={48}
-                    height={48}
-                    className="object-contain"
-                  />
+              <>
+                <div className="flex items-center space-x-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#FEFDFD] to-gray-200 rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-[#0A7EB1] font-bold text-lg">{adminName.charAt(0)}</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-white">{adminName}</p>
+                    <p className="text-xs text-white/70">Administrator</p>
+                  </div>
                 </div>
-                <div className="relative w-32 h-8">
-                  <Image
-                    src="/images/chronyxnobg1.png"
-                    alt="Chronyx"
-                    width={128}
-                    height={32}
-                    className="object-contain"
-                  />
-                </div>
-              </div>
+                <button
+                  onClick={() => setSidebarOpen(!sidebarOpen)}
+                  className="hidden lg:block p-2 hover:bg-white/10 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </>
             ) : (
-              <div className="relative w-10 h-10 mx-auto">
-                <Image
-                  src="/images/chronyxlogo.png"
-                  alt="Chronyx Logo"
-                  width={40}
-                  height={40}
-                  className="object-contain"
-                />
-              </div>
+              <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="hidden lg:block p-2 hover:bg-white/10 rounded-lg transition-colors mx-auto"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
             )}
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="hidden lg:block p-2 hover:bg-white/10 rounded-lg transition-colors"
-            >
-              {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
           </div>
         </div>
-
-        {/* Admin Info */}
-        {sidebarOpen && (
-          <div className="px-6 py-4 border-b border-white/10">
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-[#FEFDFD] to-gray-200 rounded-full flex items-center justify-center shadow-lg">
-                <span className="text-[#0A7EB1] font-bold text-lg">{adminName.charAt(0)}</span>
-              </div>
-              <div>
-                <p className="font-semibold text-white">{adminName}</p>
-                <p className="text-xs text-white/70">Administrator</p>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Navigation */}
         <nav className="flex-1 py-6 overflow-y-auto">
