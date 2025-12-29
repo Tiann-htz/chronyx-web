@@ -52,24 +52,26 @@ setSelectedMonth(currentMonth);
 setSelectedYear(String(currentYear));
   
   loadDashboardData();
-
-    // Auto-refresh every 30 seconds
-    const interval = setInterval(() => {
-      loadDashboardData();
-    }, 30000);
-
-    return () => clearInterval(interval);
   }, []);
 
   const loadDashboardData = async (dateFrom, dateTo, chartType) => {
   try {
-    console.log('Loading dashboard:', { dateFrom, dateTo, chartType, selectedMonth, selectedYear });
+    const finalDateFrom = dateFrom || trendDateFrom;
+    const finalDateTo = dateTo || trendDateTo;
+    
+    console.log('Loading dashboard with dates:', { 
+      dateFrom: finalDateFrom, 
+      dateTo: finalDateTo, 
+      chartType, 
+      selectedMonth, 
+      selectedYear 
+    });
     
     const response = await axios.get('/api/chronyxApi', { 
       headers: { 
         'X-Action': 'get-dashboard-data',
-        'Date-From': dateFrom || trendDateFrom,
-        'Date-To': dateTo || trendDateTo,
+        'date-from': finalDateFrom,
+        'date-to': finalDateTo,
         'Selected-Month': selectedMonth,
         'Selected-Year': selectedYear,
         'Chart-Type': chartType || 'all'

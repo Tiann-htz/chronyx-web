@@ -1385,12 +1385,27 @@ async function handleGetDashboardData(req, res) {
     const phOffset = 8 * 60; // UTC+8 in minutes
     const utcTime = phNow.getTime() + (phNow.getTimezoneOffset() * 60000);
     const phDate = new Date(utcTime + (phOffset * 60000));
-    const today = phDate.toISOString().split('T')[0];
+    const todayStr = phDate.toISOString().split('T')[0];
     
-    // Calculate date 7 days ago
-    const sevenDaysAgo = new Date(phDate);
-    sevenDaysAgo.setDate(phDate.getDate() - 6);
-    const sevenDaysAgoDate = sevenDaysAgo.toISOString().split('T')[0];
+    // Check if custom date range is provided
+    const customDateFrom = req.headers['date-from'];
+    const customDateTo = req.headers['date-to'];
+    
+    let sevenDaysAgoDate, today;
+    
+    if (customDateFrom && customDateTo) {
+      // Use custom date range
+      sevenDaysAgoDate = customDateFrom;
+      today = customDateTo;
+      console.log('Using custom date range:', sevenDaysAgoDate, 'to', today);
+    } else {
+      // Use default 7-day range
+      const sevenDaysAgo = new Date(phDate);
+      sevenDaysAgo.setDate(phDate.getDate() - 6);
+      sevenDaysAgoDate = sevenDaysAgo.toISOString().split('T')[0];
+      today = todayStr;
+      console.log('Using default 7-day range:', sevenDaysAgoDate, 'to', today);
+    }
 
     // Get total active employees
     const totalEmployeesResult = await query(
@@ -1401,7 +1416,7 @@ async function handleGetDashboardData(req, res) {
     // Get today's attendance
     const todayAttendance = await query(
       `SELECT * FROM attendance WHERE date = ?`,
-      [today]
+      [todayStr]
     );
 
     // Calculate today's stats
@@ -1430,11 +1445,17 @@ console.log('Sample attendance record:', lastSevenDaysData[0]);
     console.log('Last 7 days raw data:', lastSevenDaysData.length, 'records');
     console.log('Date range:', sevenDaysAgoDate, 'to', today);
 
-    // Process 7 days data
+    // Process date range data (dynamic days)
+    const startDate = new Date(sevenDaysAgoDate);
+    const endDate = new Date(today);
+    const daysDiff = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+    
+    console.log('Processing', daysDiff, 'days from', sevenDaysAgoDate, 'to', today);
+    
     const sevenDaysSummary = [];
-    for (let i = 0; i < 7; i++) {
-      const date = new Date(phDate);
-      date.setDate(phDate.getDate() - (6 - i));
+    for (let i = 0; i < daysDiff; i++) {
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + i);
       const dateStr = date.toISOString().split('T')[0];
       const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
 
@@ -1550,7 +1571,7 @@ weeksInMonth.forEach((week, index) => {
       LEFT JOIN employee e ON a.employee_id = e.employee_id
       WHERE a.date = ?
       ORDER BY a.time DESC`,
-      [today]
+      [todayStr]
     );
 
     console.log('✅ DASHBOARD DATA LOADED');
