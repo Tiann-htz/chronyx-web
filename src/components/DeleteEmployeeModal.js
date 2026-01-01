@@ -69,7 +69,7 @@ export default function DeleteEmployeeModal({ isOpen, onClose, employee, onDelet
         </div>
 
         {/* Body */}
-        <div className="p-8 space-y-6">
+        <div className="p-8 space-y-6 overflow-y-auto max-h-[60vh]">
           {/* Warning Banner */}
           <div className="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-300 rounded-2xl p-5">
             <div className="flex items-start space-x-3">

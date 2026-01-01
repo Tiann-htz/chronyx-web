@@ -70,7 +70,8 @@ export default function ArchiveEmployeeModal({ isOpen, onClose, employees, onRes
 
               {/* Archived Employees List */}
               <div className="bg-white border-2 border-gray-200 rounded-2xl overflow-hidden">
-                <table className="w-full">
+                <div className="overflow-x-auto">
+    <table className="w-full min-w-[900px]">
                   <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
                     <tr>
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Employee ID</th>
@@ -152,6 +153,7 @@ export default function ArchiveEmployeeModal({ isOpen, onClose, employees, onRes
                   </tbody>
                 </table>
               </div>
+            </div>
             </div>
           ) : (
             <div className="text-center py-16">

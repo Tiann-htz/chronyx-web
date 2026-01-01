@@ -103,7 +103,7 @@ export default function AttendanceFilterModal({ isOpen, onClose, onApplyFilter }
         </div>
 
         {/* Body */}
-        <div className="p-8 space-y-6">
+        <div className="p-8 space-y-6 overflow-y-auto max-h-[60vh]">
           {/* Info Banner */}
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-2xl p-5">
             <div className="flex items-start space-x-3">

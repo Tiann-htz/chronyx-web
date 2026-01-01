@@ -170,7 +170,7 @@ export default function AddEmployeeModal({ isOpen, onClose, onSave }) {
 
         {/* Body */}
         <div className="p-8 space-y-6 overflow-y-auto"
-          style={{ maxHeight: 'calc(95vh - 200px)' }}
+          style={{ maxHeight: 'calc(80vh - 200px)' }}
         >
           {/* Step 1: Employee Information Form */}
           {step === 1 && (

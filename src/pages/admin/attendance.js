@@ -351,49 +351,88 @@ const [timePolicy, setTimePolicy] = useState(null);
                 </div>
               )}
               {timePolicy && (
-  <div className="flex items-center space-x-2 mt-2">
-    <div className="px-4 py-2 bg-green-100 text-green-700 text-xs font-semibold rounded-xl border-2 border-green-200">
-      <div className="flex items-center space-x-2 mb-1">
-        <Settings className="w-3 h-3" />
-        <span className="font-bold">Active Time Policy</span>
+  <div className="mt-2">
+    {/* Desktop Layout */}
+    <div className="hidden md:block">
+      <div className="px-4 py-2 bg-green-100 text-green-700 text-xs font-semibold rounded-xl border-2 border-green-200">
+        <div className="flex items-center space-x-2 mb-1">
+          <Settings className="w-3 h-3" />
+          <span className="font-bold">Active Time Policy</span>
+        </div>
+        <div className="flex items-center space-x-4 text-xs">
+          <span>📥 Time In: {formatTime(timePolicy.time_in_start)} - {formatTime(timePolicy.time_in_end)} (Grace: {timePolicy.grace_period}min)</span>
+          <span className="text-green-400">|</span>
+          <span>📤 Time Out: {formatTime(timePolicy.official_time_out)}</span>
+          <span className="text-green-400">|</span>
+          <span>⏱️ Required: {timePolicy.required_hours}h</span>
+        </div>
       </div>
-      <div className="flex items-center space-x-4 text-xs">
-        <span>📥 Time In: {formatTime(timePolicy.time_in_start)} - {formatTime(timePolicy.time_in_end)} (Grace: {timePolicy.grace_period}min)</span>
-        <span className="text-green-400">|</span>
-        <span>📤 Time Out: {formatTime(timePolicy.official_time_out)}</span>
-        <span className="text-green-400">|</span>
-        <span>⏱️ Required: {timePolicy.required_hours}h</span>
+    </div>
+    {/* Mobile Layout */}
+    <div className="md:hidden">
+      <div className="px-3 py-2 bg-green-100 text-green-700 text-xs font-semibold rounded-xl border-2 border-green-200">
+        <div className="flex items-center space-x-2 mb-2">
+          <Settings className="w-3 h-3" />
+          <span className="font-bold">Active Time Policy</span>
+        </div>
+        <div className="space-y-1 text-xs">
+          <div>📥 Time In: {formatTime(timePolicy.time_in_start)} - {formatTime(timePolicy.time_in_end)}</div>
+          <div>🕐 Grace Period: {timePolicy.grace_period} minutes</div>
+          <div>📤 Time Out: {formatTime(timePolicy.official_time_out)}</div>
+          <div>⏱️ Required Hours: {timePolicy.required_hours}h</div>
+        </div>
       </div>
     </div>
   </div>
 )}
             </div>
 
-            <div className="flex items-center space-x-4">
-  <button 
-    onClick={() => setShowTimePolicyModal(true)}
-    className="flex items-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-lg transition-all shadow-md hover:shadow-lg font-semibold"
-  >
-    <Settings className="w-5 h-5" />
-    <span>Setup Policy</span>
-  </button>
-  <button 
-    onClick={() => setShowFilterModal(true)}
-    className="flex items-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-[#0A7EB1] to-[#105891] hover:from-[#105891] hover:to-[#0A6BA3] text-white rounded-lg transition-all shadow-md hover:shadow-lg font-semibold"
-  >
-    <Filter className="w-5 h-5" />
-    <span>Filter Records</span>
-  </button>
-              
-            </div>
+            <div>
+  {/* Desktop Layout */}
+  <div className="hidden md:flex items-center space-x-4">
+    <button 
+      onClick={() => setShowTimePolicyModal(true)}
+      className="flex items-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-lg transition-all shadow-md hover:shadow-lg font-semibold"
+    >
+      <Settings className="w-5 h-5" />
+      <span>Setup Policy</span>
+    </button>
+    <button 
+      onClick={() => setShowFilterModal(true)}
+      className="flex items-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-[#0A7EB1] to-[#105891] hover:from-[#105891] hover:to-[#0A6BA3] text-white rounded-lg transition-all shadow-md hover:shadow-lg font-semibold"
+    >
+      <Filter className="w-5 h-5" />
+      <span>Filter Records</span>
+    </button>
+  </div>
+  
+</div>
           </div>
         </header>
 
         {/* Content Area */}
         <main className="flex-1 overflow-auto p-8">
           <div className="max-w-7xl mx-auto space-y-6">
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Mobile Action Buttons - Above Stats Cards */}
+<div className="md:hidden grid grid-cols-2 gap-3 mb-6">
+  <button 
+    onClick={() => setShowTimePolicyModal(true)}
+    className="flex items-center justify-center space-x-1.5 px-3 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-lg transition-all shadow-sm hover:shadow-md text-sm font-semibold"
+  >
+    <Settings className="w-4 h-4" />
+    <span>Setup Policy</span>
+  </button>
+  <button 
+    onClick={() => setShowFilterModal(true)}
+    className="flex items-center justify-center space-x-1.5 px-3 py-2.5 bg-gradient-to-r from-[#0A7EB1] to-[#105891] hover:from-[#105891] hover:to-[#0A6BA3] text-white rounded-lg transition-all shadow-sm hover:shadow-md text-sm font-semibold"
+  >
+    <Filter className="w-4 h-4" />
+    <span>Filter Records</span>
+  </button>
+</div>
+
+{/* Stats Cards */}
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
                 <div className="flex items-center justify-between">
                   <div>

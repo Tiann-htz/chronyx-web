@@ -218,9 +218,10 @@ setSelectedYear(String(currentYear));
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
               {/* 7-Day Trend Chart - LINE CHART WITH DATE FILTER */}
 <div className="xl:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-  <div className="flex items-center justify-between mb-4">
-    <h3 className="text-lg font-bold text-gray-800">Attendance Trend</h3>
-    <div className="flex items-center space-x-2">
+  <div className="mb-4">
+    <h3 className="text-lg font-bold text-gray-800 mb-3">Attendance Trend</h3>
+    {/* Desktop Layout */}
+    <div className="hidden md:flex items-center space-x-2">
       <input
         type="date"
         value={trendDateFrom}
@@ -239,6 +240,30 @@ setSelectedYear(String(currentYear));
         className="px-4 py-1.5 bg-[#0A7EB1] text-white text-sm font-medium rounded-lg hover:bg-[#105891] transition-colors"
       >
         Apply
+      </button>
+    </div>
+    {/* Mobile Layout */}
+    <div className="md:hidden space-y-2">
+      <div className="flex items-center space-x-2">
+        <input
+          type="date"
+          value={trendDateFrom}
+          onChange={(e) => setTrendDateFrom(e.target.value)}
+          className="flex-1 px-3 py-2 text-sm border border-gray-300 text-gray-600 rounded-lg focus:ring-2 focus:ring-[#0A7EB1] focus:border-transparent"
+        />
+        <span className="text-sm text-gray-500">to</span>
+        <input
+          type="date"
+          value={trendDateTo}
+          onChange={(e) => setTrendDateTo(e.target.value)}
+          className="flex-1 px-3 py-2 text-sm border border-gray-300 text-gray-600 rounded-lg focus:ring-2 focus:ring-[#0A7EB1] focus:border-transparent"
+        />
+      </div>
+      <button
+        onClick={() => loadDashboardData(trendDateFrom, trendDateTo, 'trend')}
+        className="w-full px-4 py-2 bg-[#0A7EB1] text-white text-sm font-medium rounded-lg hover:bg-[#105891] transition-colors"
+      >
+        Apply Filter
       </button>
     </div>
   </div>
@@ -367,9 +392,10 @@ setSelectedYear(String(currentYear));
 
           {/* Monthly Summary Chart - BAR CHART WITH MONTH/YEAR PICKER */}
 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-  <div className="flex items-center justify-between mb-4">
-    <h3 className="text-lg font-bold text-gray-800">Monthly Summary</h3>
-    <div className="flex items-center space-x-2">
+  <div className="mb-4">
+    <h3 className="text-lg font-bold text-gray-800 mb-3">Monthly Summary</h3>
+    {/* Desktop Layout */}
+    <div className="hidden md:flex items-center space-x-2">
       <select
         value={selectedMonth}
         onChange={(e) => setSelectedMonth(e.target.value)}
@@ -403,6 +429,45 @@ setSelectedYear(String(currentYear));
         className="px-4 py-1.5 bg-[#0A7EB1] text-white text-sm font-medium rounded-lg hover:bg-[#105891] transition-colors"
       >
         Apply
+      </button>
+    </div>
+    {/* Mobile Layout */}
+    <div className="md:hidden space-y-2">
+      <div className="grid grid-cols-2 gap-2">
+        <select
+          value={selectedMonth}
+          onChange={(e) => setSelectedMonth(e.target.value)}
+          className="px-3 py-2 text-sm border border-gray-300 text-gray-600 rounded-lg focus:ring-2 focus:ring-[#0A7EB1] focus:border-transparent"
+        >
+          <option value="01">January</option>
+          <option value="02">February</option>
+          <option value="03">March</option>
+          <option value="04">April</option>
+          <option value="05">May</option>
+          <option value="06">June</option>
+          <option value="07">July</option>
+          <option value="08">August</option>
+          <option value="09">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
+        </select>
+        <select
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(e.target.value)}
+          className="px-3 py-2 text-sm border border-gray-300 text-gray-600 rounded-lg focus:ring-2 focus:ring-[#0A7EB1] focus:border-transparent"
+        >
+          <option value="2023">2023</option>
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+        </select>
+      </div>
+      <button
+        onClick={() => loadDashboardData(null, null, 'month')}
+        className="w-full px-4 py-2 bg-[#0A7EB1] text-white text-sm font-medium rounded-lg hover:bg-[#105891] transition-colors"
+      >
+        Apply Filter
       </button>
     </div>
   </div>
