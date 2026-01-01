@@ -109,7 +109,8 @@ export default function EditEmployeeModal({ isOpen, onClose, employee, onSave })
         </div>
 
         {/* Body */}
-        <div className="p-8 space-y-6">
+        {/* Body */}
+<div className="p-8 space-y-6 overflow-y-auto max-h-[60vh]">
           {/* Employee Info Banner */}
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-2xl p-5">
             <div className="flex items-start space-x-3">
