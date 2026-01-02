@@ -300,7 +300,7 @@ const [selectedEmployee, setSelectedEmployee] = useState(null);
 
             {/* Employees Table */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto max-h-[60vh]">
                 <table className="w-full">
                   <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
   <tr>
