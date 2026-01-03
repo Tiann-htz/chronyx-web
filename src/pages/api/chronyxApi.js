@@ -104,6 +104,10 @@ async function handleTestConnection(req, res) {
   }
 }
 
+
+
+
+
 // Admin Login (Step 1: Username & Password)
 async function handleAdminLogin(req, res) {
   try {
@@ -155,6 +159,9 @@ async function handleAdminLogin(req, res) {
     });
   }
 }
+
+
+
 
 // Verify PIN (Step 2: PIN Verification)
 async function handleVerifyPin(req, res) {
@@ -208,6 +215,10 @@ async function handleVerifyPin(req, res) {
   }
 }
 
+
+
+
+
 // Get All Employees with QR Status
 async function handleGetEmployees(req, res) {
   try {
@@ -246,6 +257,11 @@ async function handleGetEmployees(req, res) {
     });
   }
 }
+
+
+
+
+
 
 // Get Recent Attendance 
 async function handleGetRecentAttendance(req, res) {
@@ -292,6 +308,9 @@ async function handleGetRecentAttendance(req, res) {
   }
 }
 
+
+
+
 // Get All QR Codes
 async function handleGetQRCodes(req, res) {
   try {
@@ -315,6 +334,9 @@ async function handleGetQRCodes(req, res) {
     });
   }
 }
+
+
+
 
 // Get Time Policy
 async function handleGetTimePolicy(req, res) {
@@ -347,6 +369,9 @@ async function handleGetTimePolicy(req, res) {
   }
 }
 
+
+
+
 // Get All Payroll Records
 async function handleGetPayrollRecords(req, res) {
   try {
@@ -374,6 +399,9 @@ async function handleGetPayrollRecords(req, res) {
     });
   }
 }
+
+
+
 
 // Calculate Payroll
 async function handleCalculatePayroll(req, res) {
@@ -496,6 +524,10 @@ async function handleCalculatePayroll(req, res) {
   }
 }
 
+
+
+
+
 // Generate Payroll Records
 async function handleGeneratePayroll(req, res) {
   try {
@@ -551,6 +583,9 @@ async function handleGeneratePayroll(req, res) {
     });
   }
 }
+
+
+
 
 // Record Attendance
 async function handleRecordAttendance(req, res) {
@@ -762,6 +797,10 @@ const result = await query(
 }
 
 
+
+
+
+
 // Add Employee
 async function handleAddEmployee(req, res) {
   try {
@@ -834,6 +873,11 @@ async function handleAddEmployee(req, res) {
     });
   }
 }
+
+
+
+
+
 
 // Update Employee
 async function handleUpdateEmployee(req, res) {
@@ -914,6 +958,10 @@ async function handleUpdateEmployee(req, res) {
   }
 }
 
+
+
+
+
 // Delete Employee (Mark as Inactive)
 async function handleDeleteEmployee(req, res) {
   try {
@@ -959,6 +1007,10 @@ async function handleDeleteEmployee(req, res) {
   }
 }
 
+
+
+
+
 // Restore Employee (Mark as Active)
 async function handleRestoreEmployee(req, res) {
   try {
@@ -1003,6 +1055,10 @@ async function handleRestoreEmployee(req, res) {
     });
   }
 }
+
+
+
+
 
 // Save Time Policy
 async function handleSaveTimePolicy(req, res) {
@@ -1068,6 +1124,9 @@ async function handleSaveTimePolicy(req, res) {
     });
   }
 }
+
+
+
 
 
 // Generate Attendance Report
@@ -1198,6 +1257,9 @@ async function handleGenerateReport(req, res) {
 }
 
 
+
+
+
 // Get Employee QR Details
 async function handleGetEmployeeQR(req, res) {
   try {
@@ -1260,6 +1322,10 @@ async function handleGetEmployeeQR(req, res) {
   }
 }
 
+
+
+
+
 // Deactivate QR Code
 async function handleDeactivateQR(req, res) {
   try {
@@ -1318,6 +1384,10 @@ async function handleDeactivateQR(req, res) {
   }
 }
 
+
+
+
+
 // Activate QR Code
 async function handleActivateQR(req, res) {
   try {
@@ -1373,6 +1443,11 @@ async function handleActivateQR(req, res) {
     });
   }
 }
+
+
+
+
+
 
 
 // Get Dashboard Data
@@ -1601,5 +1676,9 @@ weeksInMonth.forEach((week, index) => {
     });
   }
 }
+
+
+
+
 
 export default handler;
